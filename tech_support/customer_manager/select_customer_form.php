@@ -8,6 +8,13 @@ $statement->bindValue(':customer_id', $customer_id);
 $statement->execute();
 $customer = $statement->fetch();
 $statement->closeCursor();
+
+
+$query = 'SELECT * FROM countries';
+$statement = $db->prepare($query);
+$statement->execute();
+$countries = $statement->fetchAll();
+$statement->closeCursor();
 ?>
 
 <!DOCTYPE html>
@@ -38,8 +45,16 @@ $statement->closeCursor();
                     <input type="text" name="state" value="<?php echo htmlspecialchars($customer['state']); ?>"><br>
                     <label>Postal Code:</label>
                     <input type="text" name="postal_code" value="<?php echo htmlspecialchars($customer['postalCode']); ?>"><br>
-                    <label>Country Code:</label>
-                    <input type="text" name="country_code" value="<?php echo htmlspecialchars($customer['countryCode']); ?>"><br>
+                    <label>Country:</label>
+                    <select name="country_code">
+                    <?php foreach ($countries as $country) : ?>
+                        <option value="<?php echo htmlspecialchars($country['countryCode']); ?>"
+                            <?php if ($customer['countryCode'] == $country['countryCode']) echo 'selected'; ?>>
+                            <?php echo htmlspecialchars($country['countryName']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select><br>
+
                     <label>Phone:</label>
                     <input type="text" name="phone" value="<?php echo htmlspecialchars($customer['phone']); ?>"><br>
                     <label>Password:</label>
